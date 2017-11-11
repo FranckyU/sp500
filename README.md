@@ -1,8 +1,14 @@
 # Sp500
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/sp500`. To experiment with that code, run `bin/console` for an interactive prompt.
+Welcome to sp500, you'll find this gem useful for exploring the S&P 500 stock list.
 
-TODO: Delete this and the text above, and describe your gem
+## Features
+
+- List all the 505 stocks. The API for that is `Sp500.list`
+- List SECTORS and INDUSTRIES => `Sp500.sectors`, `Sp500.industries`
+- Group stocks by GICS SECTOR or INDUSTRY => `Sp500.by_sectors`, `Sp500.by_industries`
+
+To experiment with these features, run `bin/console` for an interactive prompt.
 
 ## Installation
 
@@ -32,7 +38,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/sp500. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
+Bug reports and pull requests are welcome on GitHub at https://github.com/FranckyU/sp500. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
 
 ## License
 
@@ -40,4 +46,4 @@ The gem is available as open source under the terms of the [MIT License](https:/
 
 ## Code of Conduct
 
-Everyone interacting in the Sp500 project’s codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/[USERNAME]/sp500/blob/master/CODE_OF_CONDUCT.md).
+Everyone interacting in the Sp500 project’s codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/FranckyU/sp500/blob/master/CODE_OF_CONDUCT.md).
