@@ -5,9 +5,10 @@ require 'byebug'
 require 'date'
 
 require "sp500/version"
+require "tools/string_extensions"
 
 module Sp500
-  using StringExtension
+  using Tools::StringExtension
 
   class << self
     def list
@@ -84,3 +85,4 @@ module Sp500
       result
     end
   end
+end

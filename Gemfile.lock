@@ -1,0 +1,28 @@
+PATH
+  remote: .
+  specs:
+    sp500 (0.1.0)
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    byebug (9.1.0)
+    mini_portile2 (2.3.0)
+    minitest (5.10.3)
+    nokogiri (1.8.1)
+      mini_portile2 (~> 2.3.0)
+    rake (10.5.0)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  bundler (~> 1.16)
+  byebug (~> 9.1)
+  minitest (~> 5.0)
+  nokogiri (~> 1.8)
+  rake (~> 10.0)
+  sp500!
+
+BUNDLED WITH
+   1.16.0
