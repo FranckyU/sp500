@@ -1,11 +1,12 @@
 require 'open-uri'
 require 'nokogiri'
-require 'pp'
-require 'byebug'
 require 'date'
 
-require "sp500/version"
 require "tools/string_extensions"
+require "tools/hash_constructed"
+
+require "sp500/version"
+require "sp500/stock"
 
 module Sp500
   using Tools::StringExtension
@@ -28,7 +29,7 @@ module Sp500
 
         next if cells.empty?
 
-        {
+        Stock.new(
           ticker_symbol: cells[0][0],
           nyse_quote_url: cells[0][1],
           firm_name: cells[1][0],
@@ -41,22 +42,22 @@ module Sp500
           firm_hq_address_url: cells[5][1],
           sp500_introduction_date: (cells[6].blank? ? 'n/a' : Date.parse(cells[6])),
           central_index_key: cells[7]
-        }
+        )
       end.compact
     end
 
     def sectors
-      list.map do |item| 
-        item[:gics_sector]
+      list.map do |stock| 
+        stock.gics_sector
       end.uniq.sort
     end
 
     def industries
       result = {}
 
-      list.each do |item| 
-        result[item[:gics_sector]] ||= []
-        result[item[:gics_sector]] << item[:gics_sub_industry] unless result[item[:gics_sector]].include?(item[:gics_sub_industry])
+      list.each do |stock| 
+        result[stock.gics_sector] ||= []
+        result[stock.gics_sector] << stock.gics_sub_industry unless result[stock.gics_sector].include?(stock.gics_sub_industry)
       end
 
       result
@@ -65,9 +66,9 @@ module Sp500
     def by_sectors
       result = {}
 
-      list.each do |item|
-        result[item[:gics_sector]] ||= []
-        result[item[:gics_sector]] << item
+      list.each do |stock|
+        result[stock.gics_sector] ||= []
+        result[stock.gics_sector] << stock
       end
 
       result
@@ -76,10 +77,10 @@ module Sp500
     def by_industries
       result = {}
 
-      list.each do |item| 
-        result[item[:gics_sector]] ||= {}
-        result[item[:gics_sector]][item[:gics_sub_industry]] ||= []
-        result[item[:gics_sector]][item[:gics_sub_industry]] << item
+      list.each do |stock| 
+        result[stock.gics_sector] ||= {}
+        result[stock.gics_sector][stock.gics_sub_industry] ||= []
+        result[stock.gics_sector][stock.gics_sub_industry] << stock
       end
 
       result
