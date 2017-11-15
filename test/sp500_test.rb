@@ -30,4 +30,13 @@ class Sp500Test < Minitest::Test
   def test_sp500_latest_by_industries
     #pp Sp500.by_industries
   end
+
+  def test_apple_intraday_quote
+    Sp500.configure_with_alpha_vantage_quotes_provider
+
+    appl_quotes = Sp500::Stock.new(ticker_symbol: 'AAPL').get_intraday_quotes(interval: '30min')
+
+    assert_equal Hash, appl_quotes.class
+    refute appl_quotes.empty?
+  end
 end

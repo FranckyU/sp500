@@ -1,5 +1,5 @@
 module Tools
-  module StringExtension
+  module StringExtensions
     unless defined? ActiveSupport::CoreExtensions
       refine String do
         def blank?

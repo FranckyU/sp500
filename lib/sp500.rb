@@ -1,21 +1,26 @@
+require 'pp'
 require 'open-uri'
-require 'nokogiri'
 require 'date'
+require 'json'
+require 'byebug'
+require 'nokogiri'
 
 require "tools/string_extensions"
+require "tools/hash_extensions"
 require "tools/hash_constructed"
 
 require "sp500/version"
+require "sp500/config"
 require "sp500/stock"
 
 module Sp500
-  using Tools::StringExtension
+  using Tools::StringExtensions
+  using Tools::HashExtensions
 
   class << self
     def list(refresh: false)
       if refresh
-        doc = Nokogiri::HTML(open("https://en.wikipedia.org/wiki/List_of_S%26P_500_companies"))
-        doc.at_xpath("//div[@id='mw-content-text']//table[contains(@class,'wikitable')]").search('tr').map do |row|
+        rows_from_wiki_source.map do |row|
           stock_from_wiki_html_table_row(format_wiki_html_table_row(row))
         end.compact
       else
@@ -63,7 +68,32 @@ module Sp500
       result
     end
 
+    def configure_with_alpha_vantage_quotes_provider
+      Config.configure do |config|
+        config.quotes_provider_host = 'www.alphavantage.co'
+        config.quotes_request_path = '/query'
+
+        alpha_api_key_file = File.expand_path('~/.alpha_vantage')
+
+        config.quotes_provider_api_key = if File.exists?(alpha_api_key_file)
+          api_key = 'demo'
+          begin
+            file = File.open(alpha_api_key_file)
+            api_key = file.read.gsub(/\n/, '').gsub('API_KEY=', '')
+          ensure
+            file.close
+          end
+        end
+
+        config.quotes_provider_api_key = 'demo' if config.quotes_provider_api_key.nil?
+      end
+    end
+
     private
+
+    def rows_from_wiki_source
+      Nokogiri::HTML(open("https://en.wikipedia.org/wiki/List_of_S%26P_500_companies")).at_xpath("//div[@id='mw-content-text']//table[contains(@class,'wikitable')]").search('tr')
+    end
 
     def stock_from_wiki_html_table_row(data)
       return nil if data.empty?
